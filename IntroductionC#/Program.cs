@@ -1,5 +1,5 @@
-﻿#define CONSOLE_PARAMETERS
-#define STRING_OPERATIONS
+﻿//#define CONSOLE_PARAMETERS
+//#define STRING_OPERATIONS
 
 using System;
 using System.Collections.Generic;
