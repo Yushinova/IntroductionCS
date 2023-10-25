@@ -45,7 +45,15 @@ namespace Introduction
 			Console.WriteLine(string.Format("Ваше имя: {0}, Ваша фамилия: {1}, Ваш возраст: {2} лет.", first_name, last_name, age));    //Форматирование строк
 			Console.WriteLine($"Ваше имя: {first_name}, Ваша фамилия: {last_name}, Ваш возраст: {age} лет.");   //Интерполяция строк  
 #endif
-
+			Random dice = new Random();
+			int roll = dice.Next(-10,10);
+			Console.WriteLine(roll);
+			int a = 500;
+			int b = 100;
+			double res = Math.Min(a,b);
+			Console.WriteLine(res);
+			string str = "Start with me!";
+			Console.WriteLine(str.IndexOf('t'));
         }
     }
 }

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 public class MySquare//ячейка
 {
     private int size;
-    public MySquare(int var)//конструктор почему то не могу сделать приватным
+    public MySquare(int var)//ctor
     {
         if (var < 1) size = 1;
-        if (var > 5) size = 5;
+        else if (var > 5) size = 5;
         else size = var;
     }
     public void Print(int X, int Y, ConsoleColor color)
@@ -20,7 +20,7 @@ public class MySquare//ячейка
         {
             Console.ForegroundColor = color;
             Console.BackgroundColor = color;
-            Console.SetCursorPosition(X, Y+i);
+            Console.SetCursorPosition(X, Y + i);
             for (global::System.Int32 j = 0; j < size; j++)
             {
                 Console.Write("* ");
@@ -41,28 +41,26 @@ public class MyChessBoard//доска
     public MyChessBoard(int var, MySquare obj)
     {
         if (var < 3) size = 3;
-        if (var > 10) size = 10;
+        else if (var > 10) size = 10;
         else size = var;
         this.obj = obj;
     }
-    public void Print(int X=0, int Y=0)
+    public void Print(int X = 0, int Y = 0)
     {
         int temp = X;//если здают координаты отличные от 0
         for (int i = 0; i < size; i++)
         {
             for (global::System.Int32 j = 0; j < size; j++)
             {
-                if (i % 2 == 0)
+                if ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0))
                 {
-                    if(j%2==0) obj.Print(X, Y, ConsoleColor.White);
-                    else obj.Print(X, Y, ConsoleColor.Gray);
-                } 
+                    obj.Print(X, Y, ConsoleColor.White);
+                }
                 else
                 {
-                    if (j % 2 == 0) obj.Print(X, Y, ConsoleColor.Gray);
-                    else obj.Print(X, Y, ConsoleColor.White);
+                    obj.Print(X, Y, ConsoleColor.Gray);
                 }
-                X += obj.getSize()*2;
+                X += obj.getSize() * 2;
             }
             X = temp;//возвращаем значение которое передали
             Y += obj.getSize();
@@ -78,10 +76,10 @@ namespace ChessBoard
             Console.Write("Ведите размер ячейки (от 1 до 5): ");
             int size_square = Convert.ToInt32(Console.ReadLine());
             Console.Write("Введите размер доски: (от 3 до 10)");
-            int size_board=Convert.ToInt32(Console.ReadLine());
+            int size_board = Convert.ToInt32(Console.ReadLine());
             MySquare obj = new MySquare(size_square);
             MyChessBoard obj2 = new MyChessBoard(size_board, obj);
-            obj2.Print(0,3);
+            obj2.Print(0, 3);
         }
     }
 }
