@@ -111,7 +111,7 @@ public class Babay
                     if (X < 39) X++;
                     if (X == 39) Console.Beep(37, 800);
                     break;
-                case ConsoleKey.W://стрелялка пока хорошо не работает НУЖНЫ ПОТОКИ
+                case ConsoleKey.W://нужно вынести в отдльную функцию и сделать через потоки
                     tempY = Y;
                     tempX = X + 1;
                     while (tempY != 1)
