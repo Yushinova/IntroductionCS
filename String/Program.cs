@@ -13,6 +13,7 @@ namespace String
         static void Main(string[] args)
         {
             Random rand = new Random(0);
+            int summ = 0;
 #if MASS1
             Console.WriteLine("size:");
             int sise = Convert.ToInt32(Console.ReadLine());
@@ -30,8 +31,7 @@ namespace String
             {
                 Console.Write(i + "\t");
             }
-            Console.WriteLine();
-            int summ=0;
+            Console.WriteLine(); 
             foreach (int i in arr)
             {
                 summ += i;
@@ -86,6 +86,7 @@ namespace String
             Console.WriteLine("Max: " + arr.Cast<int>().Max());
 #endif
             //зубчатые массивы
+            int lenght_mas=0, min=0, max=0;
             int[][] arr =
             {
                 new int[]{3,5,8,13,21},
@@ -100,6 +101,26 @@ namespace String
                 }
                 Console.WriteLine();
             }
+            for (int i = 0; i < arr.Length; i++)//количество элементов
+            {
+                lenght_mas += arr[i].Length;
+            }
+            Console.WriteLine("Lenght all:" + lenght_mas);
+            for (int i = 0; i < arr.Length; i++)//сумма всех элементов
+            {
+                summ += arr[i].Sum();
+            }
+            Console.WriteLine("summ all:" + summ);
+            Console.WriteLine("average all:" + summ/lenght_mas);//среднее арифметическое
+            min = arr[0].Min();
+            max = arr[0].Max();
+            for (int i = 0; i < arr.Length; i++)//мин и макс
+            {
+                if (arr[i].Min() < min) min = arr[i].Min();
+                if (arr[i].Max() > max) max = arr[i].Max();
+            }
+            Console.WriteLine("min all:" + min);
+            Console.WriteLine("max all:" + max);
         }
     }
 }
