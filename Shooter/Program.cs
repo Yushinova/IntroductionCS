@@ -2,6 +2,7 @@
 //#define BUTTONS
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -250,6 +251,7 @@ namespace Shooter
                 //Console.WriteLine(a);
                 //Console.WriteLine(b);
                 //Console.WriteLine(symbol);
+                //}
                 Console.Clear();
                 switch (Convert.ToChar(symbol))
                 {
@@ -262,7 +264,6 @@ namespace Shooter
                     case '%': Console.WriteLine(a + symbol + b + "=" + (Convert.ToDouble(a) % Convert.ToDouble(b))); break;
                     case '-': Console.WriteLine(a + symbol + b + "=" + (Convert.ToDouble(a) - Convert.ToDouble(b))); break;
                 }
-                //}
                 Console.WriteLine("Для продолжения нажмите любую клавишу/выход Esc");
                 Thread.Sleep(200);
                 key = Console.ReadKey(true).Key;
