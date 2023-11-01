@@ -80,7 +80,7 @@ namespace Calculator
                 foreach (string i in values) Console.Write(i + "\t");
                 Console.WriteLine();
                 double[] numbers = new double[values.Length];
-                for (int i = 0; i < values.Length; i++)//перевожу числа с m в массив double с нужным знаком
+                for (int i = 0; i < values.Length; i++)//перевожу числа с m в массив double с нужным знаком//переделать в лист сразу нужно
                 {
                     if (values[i].StartsWith("m"))
                     {
