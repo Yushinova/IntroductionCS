@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <Windows.h>
 #include <conio.h>
 #include <io.h>
@@ -128,7 +128,7 @@ public:
 	{
 		/*if (Root == nullptr) return 0;
 		return (Root->Data + SummData(Root->pLeft) + SummData(Root->pRight));*/
-		return Root == nullptr ? 0 : Root->Data + SummData(Root->pLeft) + SummData(Root->pRight);//тернарник
+		return Root == nullptr ? 0 : Root->Data + SummData(Root->pLeft) + SummData(Root->pRight);//С‚РµСЂРЅР°СЂРЅРёРє
 	}
 	int CountTree() const
 	{
@@ -201,7 +201,7 @@ public:
 		if (Root == nullptr) return 0;
 		leftDepth = DepthTree(Root->pLeft);
 		rightDepth = DepthTree(Root->pRight);
-		return leftDepth > rightDepth ? leftDepth + 1 : rightDepth + 1;//возвращаем глубину самой длинной ветки
+		return leftDepth > rightDepth ? leftDepth + 1 : rightDepth + 1;//РІРѕР·РІСЂР°С‰Р°РµРј РіР»СѓР±РёРЅСѓ СЃР°РјРѕР№ РґР»РёРЅРЅРѕР№ РІРµС‚РєРё
 		/*if (leftDepth > rightDepth) return leftDepth + 1;
 		else return rightDepth + 1;*/
 	}
@@ -212,7 +212,7 @@ public:
 	void PrintDepth(Element* Root, int depth, int var)
 	{
 		if (Root == nullptr) return;
-		PrintDepth(Root->pLeft, depth+1, var);//потому что передаем первую глубину, а следующий шаг, это в любом случае +1
+		PrintDepth(Root->pLeft, depth+1, var);//РїРѕС‚РѕРјСѓ С‡С‚Рѕ РїРµСЂРµРґР°РµРј РїРµСЂРІСѓСЋ РіР»СѓР±РёРЅСѓ, Р° СЃР»РµРґСѓСЋС‰РёР№ С€Р°Рі, СЌС‚Рѕ РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ +1
 		PrintDepth(Root->pRight, depth+1, var);
 		if (depth == var) cout << Root->Data << "\t";	
 	}
@@ -270,7 +270,7 @@ public:
 	{
 		BalanceTree(Root);
 	}
-	void BalanceTree(Element*& Root)//если левая или правая сторона имеют разную глубину
+	void BalanceTree(Element*& Root)//РµСЃР»Рё Р»РµРІР°СЏ РёР»Рё РїСЂР°РІР°СЏ СЃС‚РѕСЂРѕРЅР° РёРјРµСЋС‚ СЂР°Р·РЅСѓСЋ РіР»СѓР±РёРЅСѓ
 	{
 		int temp = Root->Data;
 		if (Root == nullptr) return;
@@ -286,7 +286,7 @@ public:
 	{
 		BalanceTree(Root, bufer);
 	}
-	void BalanceTree(Element* &Root, vector <int> &bufer)//для полностью вырожденного дерева
+	void BalanceTree(Element* &Root, vector <int> &bufer)//РґР»СЏ РїРѕР»РЅРѕСЃС‚СЊСЋ РІС‹СЂРѕР¶РґРµРЅРЅРѕРіРѕ РґРµСЂРµРІР°
 	{
 		if (Root == nullptr) return;
 		BalanceTree(Root->pLeft, bufer);
@@ -407,15 +407,15 @@ void main()
 #ifdef BALANCE2
 	treeU.printElement();
 	treeU.PrintTree(15, 12);
-	vector <int> bufer;//для вырожденного дерева
+	vector <int> bufer;//РґР»СЏ РІС‹СЂРѕР¶РґРµРЅРЅРѕРіРѕ РґРµСЂРµРІР°
 	treeU.BalanceTree(bufer);
 	cout << endl;
 	treeU.PrintTree(60, 12);
 #endif // BALANCE2
 #ifdef SPEED
-	//измерение скорости методов
+	//РёР·РјРµСЂРµРЅРёРµ СЃРєРѕСЂРѕСЃС‚Рё РјРµС‚РѕРґРѕРІ
 	treeU.SpeedPrint();
-	treeU.SpeedDellTree(treeU);//если раскомментировать все вызовы диструкторов, то 36 милисек 
+	treeU.SpeedDellTree(treeU);//РµСЃР»Рё СЂР°СЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ РІСЃРµ РІС‹Р·РѕРІС‹ РґРёСЃС‚СЂСѓРєС‚РѕСЂРѕРІ, С‚Рѕ 36 РјРёР»РёСЃРµРє 
 #endif // SPEED	
 	setCursor(50, 50);
 	
