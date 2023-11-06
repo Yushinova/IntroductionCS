@@ -201,7 +201,7 @@ public:
 		if (Root == nullptr) return 0;
 		leftDepth = DepthTree(Root->pLeft);
 		rightDepth = DepthTree(Root->pRight);
-		return leftDepth > rightDepth ? leftDepth + 1 : rightDepth + 1;
+		return leftDepth > rightDepth ? leftDepth + 1 : rightDepth + 1;//возвращаем глубину самой длинной ветки
 		/*if (leftDepth > rightDepth) return leftDepth + 1;
 		else return rightDepth + 1;*/
 	}
@@ -211,9 +211,8 @@ public:
 	}
 	void PrintDepth(Element* Root, int depth, int var)
 	{
-		/*int temp = DepthTree() - depth + 1;*/
 		if (Root == nullptr) return;
-		PrintDepth(Root->pLeft, depth+1, var);
+		PrintDepth(Root->pLeft, depth+1, var);//потому что передаем первую глубину, а следующий шаг, это в любом случае +1
 		PrintDepth(Root->pRight, depth+1, var);
 		if (depth == var) cout << Root->Data << "\t";	
 	}
@@ -307,14 +306,14 @@ public:
 			BalanceTree(Root->pRight);
 		}		
 	}
-	auto SpeedPrint()
+	void SpeedPrint()
 	{
 		auto start = chrono::system_clock::now();
 		PrintTree(60, 12);
 		auto end = chrono::system_clock::now();
 		cout << "Print tree: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " millisec" << endl;
 	}
-	auto SpeedDellTree(Tree &obj)
+	void SpeedDellTree(Tree &obj)
 	{
 		auto start = chrono::system_clock::now();
 		obj.DellTree();
@@ -375,7 +374,7 @@ void main()
 #endif
 
 	UniqueTree treeU;
-	n = 8;
+	n = 10;
 	int k = 1;
 	for (size_t i = 0; i < n; i++)
 	{
@@ -389,6 +388,7 @@ void main()
 		/*treeU.printElement();
 		Sleep(400);*/
 	}
+#ifdef BALANCE1
 	treeU.printElement();
 	cout << endl;
 	cout << "Min: " << treeU.MinData() << endl;
@@ -397,17 +397,16 @@ void main()
 	cout << "Count: " << treeU.CountTree() << endl;
 	cout << "Avg: " << treeU.AvgTree() << endl;
 	cout << "Depth: " << treeU.DepthTree() << endl;
-	treeU.DellElement(62);
-	treeU.printElement();
 	cout << endl;
 	cout << "Depth 3: ";
-	treeU.PrintDepth(1,3);
+	treeU.PrintDepth(1, 3);
 	treeU.PrintTree(15, 12);
-#ifdef BALANCE1
 	treeU.BalanceTree();
 	treeU.PrintTree(60, 12);
 #endif // BALANCE1
 #ifdef BALANCE2
+	treeU.printElement();
+	treeU.PrintTree(15, 12);
 	vector <int> bufer;//для вырожденного дерева
 	treeU.BalanceTree(bufer);
 	cout << endl;
