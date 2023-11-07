@@ -266,45 +266,26 @@ public:
 		if (size == 1) size = 6;
 		setColor(White, Black);
 	}
-	void BalanceTree()
+	void BalanceTreeCount()
 	{
-		BalanceTree(Root);
+		BalanceTreeCount(Root);
 	}
-	void BalanceTree(Element*& Root)//если левая или правая сторона имеют разную глубину
+	void BalanceTreeCount(Element*& Root)//ВЕРНОЕ РЕШЕНИЕ
 	{
 		int temp = Root->Data;
-		if (Root == nullptr) return;
-		if (DepthTree(Root->pLeft) != DepthTree(Root->pRight))
+		while (abs(CountTree(Root->pLeft) - CountTree(Root->pRight)) > 1)
 		{
-			DellElement(temp);
-			insert(temp);
-		}
-		if(DepthTree(Root->pLeft) < DepthTree(Root->pRight)) BalanceTree(Root->pRight);
-		if(DepthTree(Root->pLeft) > DepthTree(Root->pRight)) BalanceTree(Root->pLeft);
-	}
-	void BalanceTree(vector<int> &bufer)
-	{
-		BalanceTree(Root, bufer);
-	}
-	void BalanceTree(Element* &Root, vector <int> &bufer)//для полностью вырожденного дерева
-	{
-		if (Root == nullptr) return;
-		BalanceTree(Root->pLeft, bufer);
-		BalanceTree(Root->pRight, bufer);
-		bufer.push_back(Root->Data);
-		
-		if (bufer.size() == CountTree())
-		{
-			DellTree();
-			do
+			temp = Root->Data;
+			if (Root == nullptr) return;
+			if (abs(CountTree(Root->pLeft) - CountTree(Root->pRight)) < 2) return;
+			else
 			{
-				int first = bufer[bufer.size() / 2];
-				bufer.erase(bufer.begin() + bufer.size() / 2);
-				insert(first);
-			} while (bufer.size()!=0);
-			BalanceTree(Root->pLeft);
-			BalanceTree(Root->pRight);
-		}		
+				DellElement(temp);
+				insert(temp);
+			}
+			BalanceTreeCount(Root->pRight);
+			BalanceTreeCount(Root->pLeft);
+		}
 	}
 	void SpeedPrint()
 	{
@@ -401,14 +382,13 @@ void main()
 	cout << "Depth 3: ";
 	treeU.PrintDepth(1, 3);
 	treeU.PrintTree(15, 12);
-	treeU.BalanceTree();
+	treeU.BalanceTreeCount();
 	treeU.PrintTree(60, 12);
 #endif // BALANCE1
 #ifdef BALANCE2
 	treeU.printElement();
 	treeU.PrintTree(15, 12);
-	vector <int> bufer;//для вырожденного дерева
-	treeU.BalanceTree(bufer);
+	treeU.BalanceTreeCount();
 	cout << endl;
 	treeU.PrintTree(60, 12);
 #endif // BALANCE2
