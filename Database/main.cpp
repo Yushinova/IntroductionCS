@@ -31,7 +31,7 @@ public:
 		time(&rtime);//получаем текущее время
 		tm mytime;//структура для хранения данных про текущую дату
 		localtime_s(&mytime, &rtime);//расчленяем полученную дату на поля структуры
-		receipt = to_string(mytime.tm_mday) + to_string(mytime.tm_mon) + to_string(mytime.tm_year + 1900) + number_car + to_string(100 + rand() % 900);
+		receipt = number_car + to_string(mytime.tm_mday) + to_string(mytime.tm_mon) + to_string(mytime.tm_year + 1900) + to_string(100 + rand() % 900);
 		int var = rand() % Fine.size();
 		nameFine = Fine[var];
 		Sum = sum[var];
@@ -86,18 +86,35 @@ public:
 		cout << "CDisrt: " << this << endl;
 	}
 };
-
-
+class Database
+{
+	int Size;
+	map<string, vector<Receipt>>database;
+public:
+	Database(int size)
+	{
+		Size = size;
+	}
+	void setDatabase(Car car, vector<Receipt>allReceipt)
+	{
+		//pear 
+		database.insert(pair<string, vector<Receipt>>(car.getNumber(), allReceipt));
+	}
+};
 void main()
 {
 	setlocale(LC_ALL, "");
 	srand(time(NULL));
-	vector<string>Fine = { "Превышение скорости","Обгон","Пересечение сплошной","Ремень безопасности","Нет регистрации","Движение по встречному направлению" };
+	vector<string>fine = { "Превышение скорости","Обгон","Пересечение сплошной","Ремень безопасности","Нет регистрации","Движение по встречному направлению" };
 	vector<double>sum = { 2000,3000,2500,500,1000,5000 };
+	for (size_t i = 0; i < 10; i++)
+	{
+
+	}
 	Car car;
 	car.RandNumber();
 	Receipt receipt;
-	receipt.RandSet(car.getNumber(), Fine, sum);
+	receipt.RandSet(car.getNumber(), fine, sum);
 	//receipt.PrintReceipt();
 	car.AddReceipt(receipt);
 	car.PrintReceipt();

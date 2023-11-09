@@ -191,17 +191,17 @@ public:
 		if (Root)DellElement(Root->pLeft, var);
 		if (Root)DellElement(Root->pRight, var);
 	}
-	int DepthTree()
+	int DepthTree()const
 	{
 		return DepthTree(Root);
 	}
-	int DepthTree(Element* Root)
+	int DepthTree(Element* Root) const
 	{
 		int leftDepth, rightDepth;
 		if (Root == nullptr) return 0;
-		leftDepth = DepthTree(Root->pLeft);
-		rightDepth = DepthTree(Root->pRight);
-		return leftDepth > rightDepth ? leftDepth + 1 : rightDepth + 1;//возвращаем глубину самой длинной ветки
+		leftDepth = DepthTree(Root->pLeft)+1;
+		rightDepth = DepthTree(Root->pRight)+1;
+		return leftDepth > rightDepth ? leftDepth : rightDepth;//возвращаем глубину самой длинной ветки
 		/*if (leftDepth > rightDepth) return leftDepth + 1;
 		else return rightDepth + 1;*/
 	}
@@ -325,15 +325,31 @@ public:
 		insert(Data, Root);
 	}
 };
-
-//#define SUMPLE_TREE
+double SpeedInt(Tree *obj, int (Tree::* ptr)()const)//функция измерения скорости
+{
+	clock_t start = clock();
+	(obj->*ptr)();
+	//cout<<"Result: "<< (obj->*ptr)() <<"\t";//работает дольше с cout
+	clock_t end = clock();
+	return double(end - start) / CLOCKS_PER_SEC;//возвращает в секундах
+}
+double SpeedVoid(Tree* obj, void (Tree::* ptr)()const)//функция измерения void без аргументов
+{
+	clock_t start = clock();
+	(obj->*ptr)();
+	clock_t end = clock();
+	return double(end - start) / CLOCKS_PER_SEC;
+}
+#define SUMPLE_TREE
+//#define UNIQUE_TREE
 //#define BALANCE1
 #define BALANCE2
-//#define SPEED
+#define SPEED
 void main()
 {
 	setlocale(LC_ALL, "");
-	int n = 5;
+	int n = 1000;
+	
 #ifdef SUMPLE_TREE
 
 	Tree tree;
@@ -343,7 +359,7 @@ void main()
 		/*tree.printElement(tree.getRoott());
 		Sleep(400);*/
 	}
-	tree.printElement();
+	//tree.printElement();
 	cout << endl;
 	cout << "Min: " << tree.MinData() << endl;
 	cout << "Max: " << tree.MaxData() << endl;
@@ -351,9 +367,26 @@ void main()
 	cout << "Count: " << tree.CountTree() << endl;
 	cout << "Avg: " << tree.AvgTree() << endl;
 	cout << "Depth: " << tree.DepthTree() << endl;
+#ifdef SPEED
+	//измерение скорости методов
+	int (Tree:: * ptr)()const;
+	ptr = &Tree::MinData;
+	cout << "Min: " << SpeedInt(&tree,ptr) << " sek" << endl;
+	ptr = &Tree::MaxData;
+	cout << "Max: " << SpeedInt(&tree,ptr) << " sek" << endl;
+	ptr = &Tree::SummData;
+	cout << "Summ: " << SpeedInt(&tree, ptr) << " sek" << endl;
+	ptr = &Tree::CountTree;
+	cout << "Count: " << SpeedInt(&tree, ptr) << " sek" << endl;
+	ptr = &Tree::DepthTree;
+	cout << "DephTree: " << SpeedInt(&tree, ptr) << " sek" << endl;
+	void (Tree:: * ptr2)()const;
+	ptr2 = &Tree::printElement;
+	cout << "Print: " << SpeedVoid(&tree, ptr2) << " sek" << endl;
+#endif // SPEED	
 	tree.DellTree();
 #endif
-
+#ifdef UNIQUE_TREE
 	UniqueTree treeU;
 	n = 10;
 	int k = 1;
@@ -372,18 +405,27 @@ void main()
 #ifdef BALANCE1
 	treeU.printElement();
 	cout << endl;
+	clock_t start = clock();
 	cout << "Min: " << treeU.MinData() << endl;
+	clock_t end = clock();
+	cout << "Speed min: " << double(end - start) / CLOCKS_PER_SEC << "sek" << endl;
 	cout << "Max: " << treeU.MaxData() << endl;
+	start = clock();
 	cout << "Summ: " << treeU.SummData() << endl;
+	end = clock();
+	cout << "Speed sum: " << double(end - start) / CLOCKS_PER_SEC << "sek" << endl;
 	cout << "Count: " << treeU.CountTree() << endl;
 	cout << "Avg: " << treeU.AvgTree() << endl;
+	start = clock();
 	cout << "Depth: " << treeU.DepthTree() << endl;
+	end = clock();
+	cout << "Speed depth: " << double(end - start) / CLOCKS_PER_SEC << "sek" << endl;
 	cout << endl;
 	cout << "Depth 3: ";
 	treeU.PrintDepth(1, 3);
-	treeU.PrintTree(15, 12);
+	//treeU.PrintTree(15, 12);
 	treeU.BalanceTreeCount();
-	treeU.PrintTree(60, 12);
+	//treeU.PrintTree(60, 12);
 #endif // BALANCE1
 #ifdef BALANCE2
 	treeU.printElement();
@@ -392,11 +434,9 @@ void main()
 	cout << endl;
 	treeU.PrintTree(60, 12);
 #endif // BALANCE2
-#ifdef SPEED
-	//измерение скорости методов
-	treeU.SpeedPrint();
-	treeU.SpeedDellTree(treeU);//если раскомментировать все вызовы диструкторов, то 36 милисек 
-#endif // SPEED	
+
+#endif // UNIQUE_TREE
+
 	setCursor(50, 50);
 	
 }
