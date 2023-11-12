@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <time.h>
+#include<fstream>
 using namespace std;
 class Receipt
 {
@@ -16,14 +17,18 @@ public:
 		receipt = "var";
 		nameFine = "name";
 		Sum = 0;
+#ifdef DEBUG
 		cout << "RCtor: " << this << endl;
+#endif // DEBUG
 	}
 	Receipt(string var, string name, double sum)
 	{
 		receipt = var;
 		nameFine = name;
 		Sum = sum;
+#ifdef DEBUG
 		cout << "RCtor: " << this << endl;
+#endif // DEBUG
 	}
 	void RandSet(string number_car, vector<string>Fine, vector<double>sum)//передаем номер машины который ввели и 2 вектра с готовыми штрафами и суммами
 	{
@@ -38,7 +43,19 @@ public:
 	}
 	void PrintReceipt()
 	{
-		cout << "N: " << receipt << "\t" << "name: " << nameFine << "\t" << "sum: " << Sum << endl;
+		cout << "N: " << receipt << "\t" << ": " << nameFine << "\t" << "sum: " << Sum << endl;
+	}
+	string getReceipt()const
+	{
+		return receipt;
+	}
+	string getnameFine()const
+	{
+		return nameFine;
+	}
+	double getSum()
+	{
+		return Sum;
 	}
 };
 class Car
@@ -46,6 +63,7 @@ class Car
 	string Number;
 	vector<Receipt>allReceipt;
 public:
+
 	void RandNumber()
 	{
 		string temp;
@@ -75,15 +93,23 @@ public:
 	Car(string number)
 	{
 		Number = number;
+#ifdef DEBUG
 		cout << "CCtor: " << this << endl;
+#endif // DEBUG
 	}
 	string getNumber()const
 	{
 		return Number;
 	}
+	vector<Receipt> getVector()
+	{
+		return allReceipt;
+	}
 	~Car()
 	{
+#ifdef DEBUG
 		cout << "CDisrt: " << this << endl;
+#endif // DEBUG
 	}
 };
 class Database
@@ -95,28 +121,103 @@ public:
 	{
 		Size = size;
 	}
-	void setDatabase(Car car, vector<Receipt>allReceipt)
+	void setDatabase(Car car)
 	{
 		//pear 
-		database.insert(pair<string, vector<Receipt>>(car.getNumber(), allReceipt));
+		database.insert(pair<string, vector<Receipt>>(car.getNumber(), car.getVector()));
+	}
+	void printDatabase()
+	{
+		for (auto it = database.begin(); it != database.end(); ++it)
+		{
+			cout << it->first << endl;
+			for (auto var : it->second)
+			{
+				var.PrintReceipt();
+			}
+			cout << endl;
+		}
+	}
+	map < string, vector<Receipt>> getBase()
+	{
+		return database;
 	}
 };
+bool isEmpty(ifstream& FILE)//проверка пуст ли файл
+{
+	int size;
+	FILE.seekg(0, ios::end);//смещаемся от начала файла до конца
+	size = FILE.tellg();//узнаём на какое количество байт произошло смещение
+	return size == 0;
+}
 void main()
 {
 	setlocale(LC_ALL, "");
 	srand(time(NULL));
-	vector<string>fine = { "Превышение скорости","Обгон","Пересечение сплошной","Ремень безопасности","Нет регистрации","Движение по встречному направлению" };
+	vector<string>fine = { "Превышение_скорости","Обгон","Пересечение_сплошной","Ремень_безопасности","Нет_регистрации","Движение_по_встречному_направлению" };
 	vector<double>sum = { 2000,3000,2500,500,1000,5000 };
-	for (size_t i = 0; i < 10; i++)
+	int size = 10, size_fine, size_vector;
+	string numberCar;
+	string numreceipt;//номер квитанции
+	string nameFine;//название штрафа
+	double Sum;
+	Database base(size);
+	ifstream readF("base.txt");
+	if (readF.is_open())
 	{
-
+		while (!readF.eof())
+		{
+			readF >> numberCar >> size_vector;
+			Car car(numberCar);
+			int temp = 0;
+			while (temp!=size_vector)
+			{
+				readF >> numreceipt >> nameFine >> Sum;
+				Receipt receipt(numreceipt, nameFine, Sum);
+				car.AddReceipt(receipt);
+				temp++;
+			}	
+			base.setDatabase(car);
+		}
+		base.printDatabase();
 	}
-	Car car;
-	car.RandNumber();
-	Receipt receipt;
-	receipt.RandSet(car.getNumber(), fine, sum);
-	//receipt.PrintReceipt();
-	car.AddReceipt(receipt);
-	car.PrintReceipt();
+	else
+	{
+		for (size_t i = 0; i < size; i++)//заполнение базы рандом
+		{
+			Car car;
+			car.RandNumber();
+			Receipt receipt;
+			size_fine = 1 + rand() % 5;
+			for (size_t i = 0; i < size_fine; i++)
+			{
+				receipt.RandSet(car.getNumber(), fine, sum);
+				car.AddReceipt(receipt);
+			}
+			base.setDatabase(car);
+		}
+		ofstream writeF("base.txt", ios::app);
+		for (const auto& entry : base.getBase())
+		{
+			if (!isEmpty(readF))
+			{
+				writeF << "\n" << entry.first << " " << entry.second.size();
+				for (auto var : entry.second)
+				{
+					writeF << "\n" << var.getReceipt() << " " << var.getnameFine() << " " << var.getSum();
+				}
+			}
+			else
+			{
+				writeF << entry.first;
+				for (auto var : entry.second)
+				{
+					writeF << " " << var.getReceipt() << " " << var.getnameFine() << " " << var.getSum();
+				}
+			}
+		}
+		writeF.close();
+	}
 
+	//base.printDatabase();
 }

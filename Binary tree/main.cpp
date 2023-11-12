@@ -205,16 +205,28 @@ public:
 		/*if (leftDepth > rightDepth) return leftDepth + 1;
 		else return rightDepth + 1;*/
 	}
-	void PrintDepth(int depth, int var)
+	void PrintDepth(int depth, int var)const
 	{
 		PrintDepth(Root, depth, var);
 	}
-	void PrintDepth(Element* Root, int depth, int var)
+	void PrintDepth(Element* Root, int depth, int var)const
 	{
 		if (Root == nullptr) return;
 		PrintDepth(Root->pLeft, depth+1, var);//потому что передаем первую глубину, а следующий шаг, это в любом случае +1
 		PrintDepth(Root->pRight, depth+1, var);
 		if (depth == var) cout << Root->Data << "\t";	
+	}
+	void PrintDepth(int depth)const
+	{
+		PrintDepth(this->Root, depth);
+	}
+	void PrintDepth(Element* Root, int depth)const
+	{
+		if (Root == nullptr) return;
+		
+		PrintDepth(Root->pLeft, depth - 1);//потому что передаем первую глубину, а следующий шаг, это в любом случае +1
+		PrintDepth(Root->pRight, depth - 1);	
+		if (depth == 1) cout << Root->Data << "\t";
 	}
 	void PrintTree(int X, int Y)
 	{
@@ -287,20 +299,6 @@ public:
 			BalanceTreeCount(Root->pLeft);
 		}
 	}
-	void SpeedPrint()
-	{
-		auto start = chrono::system_clock::now();
-		PrintTree(60, 12);
-		auto end = chrono::system_clock::now();
-		cout << "Print tree: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " millisec" << endl;
-	}
-	void SpeedDellTree(Tree &obj)
-	{
-		auto start = chrono::system_clock::now();
-		obj.DellTree();
-		auto end = chrono::system_clock::now();
-		cout << "Dell tree: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " millisec" << endl;
-	}
 };
 class UniqueTree :public Tree
 {
@@ -325,30 +323,30 @@ public:
 		insert(Data, Root);
 	}
 };
-double SpeedInt(Tree *obj, int (Tree::* ptr)()const)//функция измерения скорости
+double Speed(const Tree &obj, int (Tree::* ptr)()const)//функция измерения скорости
 {
 	clock_t start = clock();
-	(obj->*ptr)();
+	double var = (obj.*ptr)();
 	//cout<<"Result: "<< (obj->*ptr)() <<"\t";//работает дольше с cout
 	clock_t end = clock();
 	return double(end - start) / CLOCKS_PER_SEC;//возвращает в секундах
 }
-double SpeedVoid(Tree* obj, void (Tree::* ptr)()const)//функция измерения void без аргументов
+double Speed(const Tree &obj, void (Tree::* ptr)()const)//функция измерения void без аргументов
 {
 	clock_t start = clock();
-	(obj->*ptr)();
+	(obj.*ptr)();
 	clock_t end = clock();
 	return double(end - start) / CLOCKS_PER_SEC;
 }
-#define SUMPLE_TREE
-//#define UNIQUE_TREE
-//#define BALANCE1
-#define BALANCE2
+//#define SUMPLE_TREE
+#define UNIQUE_TREE
+#define BALANCE1
+//#define BALANCE2
 #define SPEED
 void main()
 {
 	setlocale(LC_ALL, "");
-	int n = 1000;
+	int n = 10;
 	
 #ifdef SUMPLE_TREE
 
@@ -369,20 +367,15 @@ void main()
 	cout << "Depth: " << tree.DepthTree() << endl;
 #ifdef SPEED
 	//измерение скорости методов
-	int (Tree:: * ptr)()const;
-	ptr = &Tree::MinData;
-	cout << "Min: " << SpeedInt(&tree,ptr) << " sek" << endl;
-	ptr = &Tree::MaxData;
-	cout << "Max: " << SpeedInt(&tree,ptr) << " sek" << endl;
-	ptr = &Tree::SummData;
-	cout << "Summ: " << SpeedInt(&tree, ptr) << " sek" << endl;
-	ptr = &Tree::CountTree;
-	cout << "Count: " << SpeedInt(&tree, ptr) << " sek" << endl;
-	ptr = &Tree::DepthTree;
-	cout << "DephTree: " << SpeedInt(&tree, ptr) << " sek" << endl;
+	//int (Tree:: * ptr)()const;
+	cout << "Min: " << Speed(tree, &Tree::MinData) << " sek" << endl;
+	cout << "Max: " << Speed(tree, &Tree::MaxData) << " sek" << endl;
+	cout << "Summ: " << Speed(tree, &Tree::SummData) << " sek" << endl;
+	cout << "Count: " << Speed(tree, &Tree::CountTree) << " sek" << endl;
+	cout << "DephTree: " << Speed(tree, &Tree::DepthTree) << " sek" << endl;
 	void (Tree:: * ptr2)()const;
 	ptr2 = &Tree::printElement;
-	cout << "Print: " << SpeedVoid(&tree, ptr2) << " sek" << endl;
+	cout << "Print: " << Speed(tree, ptr2) << " sek" << endl;
 #endif // SPEED	
 	tree.DellTree();
 #endif
@@ -405,27 +398,21 @@ void main()
 #ifdef BALANCE1
 	treeU.printElement();
 	cout << endl;
-	clock_t start = clock();
-	cout << "Min: " << treeU.MinData() << endl;
-	clock_t end = clock();
-	cout << "Speed min: " << double(end - start) / CLOCKS_PER_SEC << "sek" << endl;
-	cout << "Max: " << treeU.MaxData() << endl;
-	start = clock();
-	cout << "Summ: " << treeU.SummData() << endl;
-	end = clock();
-	cout << "Speed sum: " << double(end - start) / CLOCKS_PER_SEC << "sek" << endl;
-	cout << "Count: " << treeU.CountTree() << endl;
-	cout << "Avg: " << treeU.AvgTree() << endl;
-	start = clock();
-	cout << "Depth: " << treeU.DepthTree() << endl;
-	end = clock();
-	cout << "Speed depth: " << double(end - start) / CLOCKS_PER_SEC << "sek" << endl;
-	cout << endl;
+	//измерение скорости методов
+	//int (Tree:: * ptr)()const;
+	cout << "Min: " << Speed(treeU, &Tree::MinData) << " sek" << endl;
+	cout << "Max: " << Speed(treeU, &Tree::MaxData) << " sek" << endl;
+	cout << "Summ: " << Speed(treeU, &Tree::SummData) << " sek" << endl;
+	cout << "Count: " << Speed(treeU, &Tree::CountTree) << " sek" << endl;
+	cout << "DephTree: " << Speed(treeU, &Tree::DepthTree) << " sek" << endl;
+	void (Tree:: * ptr2)()const;
+	ptr2 = &Tree::printElement;
+	cout << "Print: " << Speed(treeU, ptr2) << " sek" << endl;
 	cout << "Depth 3: ";
-	treeU.PrintDepth(1, 3);
-	//treeU.PrintTree(15, 12);
+	treeU.PrintDepth(3);
+	treeU.PrintTree(15, 12);
 	treeU.BalanceTreeCount();
-	//treeU.PrintTree(60, 12);
+	treeU.PrintTree(60, 12);
 #endif // BALANCE1
 #ifdef BALANCE2
 	treeU.printElement();
