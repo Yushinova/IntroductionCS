@@ -5,7 +5,10 @@
 #include <vector>
 #include <time.h>
 #include<fstream>
+#include <algorithm> 
+#include<conio.h>
 using namespace std;
+enum Direction { Up = 72, Left = 75, Right = 77, Down = 80, Enter = 13, esc = 27 };
 class Receipt
 {
 	string receipt;//номер квитанции вводим с клавиатуры
@@ -126,6 +129,28 @@ public:
 		//pear 
 		database.insert(pair<string, vector<Receipt>>(car.getNumber(), car.getVector()));
 	}
+	void printAllnumbers()
+	{
+		for (auto it = database.begin(); it != database.end(); ++it)
+		{
+			cout << it->first << "\t";
+		}
+		cout << endl;
+	}
+	void findCar(string var)
+	{
+		transform(var.begin(), var.end(), var.begin(), ::toupper);//ПЕРЕВОД В ВЕРХНИЙ РЕГИСТР БУКВ
+		auto it = database.find(var);
+		if (it!=database.end())//метод возвращает итератор на элемент, если он не найден, возвращает итератор на конец карты
+		{			
+			cout << it->first << endl;
+			for (auto var : it->second)
+			{
+				var.PrintReceipt();
+			}
+		}
+		else throw exception ("Car number not found!");
+	}
 	void printDatabase()
 	{
 		for (auto it = database.begin(); it != database.end(); ++it)
@@ -170,13 +195,13 @@ void main()
 			readF >> numberCar >> size_vector;
 			Car car(numberCar);
 			int temp = 0;
-			while (temp!=size_vector)
+			while (temp != size_vector)
 			{
 				readF >> numreceipt >> nameFine >> Sum;
 				Receipt receipt(numreceipt, nameFine, Sum);
 				car.AddReceipt(receipt);
 				temp++;
-			}	
+			}
 			base.setDatabase(car);
 		}
 		base.printDatabase();
@@ -217,7 +242,29 @@ void main()
 			}
 		}
 		writeF.close();
+		base.printDatabase();
 	}
-
-	//base.printDatabase();
+	//поиск машины по номеру
+	int key;
+	cout << "Для продолжения нажмите любую клавишу/выход: Esc" << endl;
+	key = _getch();
+	if (key != esc)
+	{
+		system("cls");
+		base.printAllnumbers();
+		do
+		{
+			cout << "Number car: ";
+			getline(cin, numberCar);
+			try
+			{
+				base.findCar(numberCar);
+			}
+			catch (const exception& ex)
+			{
+				cout << ex.what() << endl;
+			}
+			key = _getch();
+		} while (key != esc);
+	}
 }
