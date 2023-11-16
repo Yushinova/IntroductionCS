@@ -56,7 +56,7 @@ public:
 	{
 		return nameFine;
 	}
-	double getSum()
+	double getSum()const
 	{
 		return Sum;
 	}
@@ -81,7 +81,7 @@ public:
 		allReceipt.push_back(var);
 
 	}
-	void PrintReceipt()
+	void PrintReceipt()const
 	{
 		cout << "Car: " << Number << endl;
 		for (Receipt var : allReceipt)
