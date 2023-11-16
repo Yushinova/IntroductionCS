@@ -19,6 +19,7 @@ namespace Point
             Console.WriteLine("Koll point: " + Point.Count);
             A.Show();
             B.Show();
+            ////////////
         }
     }
 }
