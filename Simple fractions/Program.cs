@@ -83,6 +83,8 @@ namespace Simple_fractions
                         D.Show();
                         Console.WriteLine();
                         Console.WriteLine();
+                        Console.Write("A: ");
+                        A.Show();
                         break;
                     case '+':
                         Console.SetCursorPosition(5, 10);

@@ -24,6 +24,19 @@ namespace Simple_fractions
             if (numerator == 0) Console.Write(integer_part);
             if (integer_part == 0) Console.Write(numerator + "/" + denominator);
         }
+        public override string ToString()//перевод дроби в стринг
+        {
+            string fraction = "";
+            if (integer_part != 0) fraction += integer_part;
+            if (numerator != 0)
+            {
+                if (integer_part != 0) fraction += "(";
+                fraction += $"{numerator}/{denominator}";
+                if (integer_part != 0) fraction += ")";
+            }
+            else if (numerator == 0) Console.Write("0");
+            return fraction;
+        }
         public int Delitel(int a, int b)//нашла в с++
         {
             a = Math.Abs(a);
@@ -55,6 +68,7 @@ namespace Simple_fractions
             if(integer_part!=0)
             {
                 numerator = integer_part*denominator+numerator;
+                integer_part = 0;
             }
         }
         public Simple_fractions Sum(Simple_fractions A, Simple_fractions B)
